@@ -122,7 +122,14 @@ class Player(Entity):
             r = Line(x=self.x, y=self.y, dx=button[1], dy=button[2])
             ray_array.append(r)
             sound_sys.play_sound(sound_sys.get_sound("fire_pistol"))
-
+            self.weapon_cd = 0.15
+        elif self.weapon == 2:
+            if not self.can_shoot: return
+            self.can_shoot = False
+            coords = world.get_world_coords()
+            r = Line(x=self.x, y=self.y, dx=button[1], dy=button[2])
+            ray_array.append(r)
+            sound_sys.play_sound(sound_sys.get_sound("fire_pistol"))
             self.weapon_cd = 0.15
 
 

@@ -6,6 +6,8 @@ from entity import Entity
 from zombie import Zombie
 from player import Player
 from damage_type import Damage
+from gui import Gui
+from object import Object
 
 
 class Engine(arcade.Window):
@@ -17,6 +19,9 @@ class Engine(arcade.Window):
         self.sound_sys = None
         self.player = None
         self.world = None
+        self.zombie = Zombie()
+        self.damage_sys = None
+        self.gui = None
         self.calc = None
         self.background_color = arcade.color.BLACK
         self.time_t = 0
@@ -25,12 +30,18 @@ class Engine(arcade.Window):
         self.mouse_x = 0
         self.mouse_y = 0
 
+        self.wave_counter = 0
+        self.intermission = True
+
+        self.menu = False
+
         self.ray_array = []
         self.particle_array = []
+        self.useless_gui_sprite_array = arcade.SpriteList()
         self.mob_array = []
 
         self.ent = Entity()
-        self.zombie = Zombie()
+
 
     def setup(self):
         pass
@@ -48,18 +59,62 @@ class Engine(arcade.Window):
             self.sound_sys = SoundSystem()
             self.calc = Calc()
             self.damage_sys = Damage(self.sound_sys)
+            self.gui = Gui()
             self.player = Player()
             self.world = World()
+            health_bg = Object(125, 35, "assets/textures/health_bg.png")
+            self.useless_gui_sprite_array.append(health_bg)
             self.initialized = True
         else:
-            self.background_color = arcade.color.RUSSIAN_GREEN
-            #self.ent.draw(self.world)
-            for particle in self.particle_array:
-                particle[0].draw(self.world)
-            for ray in self.ray_array:
-                ray.draw(self.world)
-            self.zombie.draw(self.world)
-            self.player.draw()
+            self.game_draw()
+
+
+    def game_draw(self):
+        self.background_color = arcade.color.RUSSIAN_GREEN
+        # self.ent.draw(self.world)
+        for particle in self.particle_array:
+            particle[0].draw(self.world)
+        for ray in self.ray_array:
+            ray.draw(self.world)
+        for mob in self.mob_array:
+            mob.draw(self.world)
+        self.zombie.draw(self.world)
+        self.player.draw()
+        self.useless_gui_sprite_array.draw()
+        health_text = self.gui.create_text(f"HP:{self.player.get_health()}", 80, 20, arcade.color.WHITE, 24, 160)
+        if self.intermission:
+            wave_text = self.gui.create_text(f"INTERMISSION", 405, 470, arcade.color.WHITE, 30, 160)
+        else:
+            wave_text = self.gui.create_text(f"WAVE: {self.wave_counter}", 405, 470, arcade.color.WHITE, 30, 160)
+
+    def game_update(self, delta_time):
+        c = self.world.get_world_coords()
+        # print(self.mouse_buttons)
+        for particle in self.particle_array:
+            if particle[0].sz <= 0:
+                self.particle_array.remove(particle)
+            particle[0].action(
+                delta_time,
+                particle[1],
+                particle[2],
+                particle[3]
+            )
+        for ray in self.ray_array:
+            print(self.ray_array)
+            ray.action(delta_time, self.ray_array)
+        if self.player != None:
+            self.player.move(self.keys, self.sound_sys, delta_time, self.calc, self.world)
+            self.player.mouse_actions(self.mouse_buttons, self.sound_sys, delta_time, self.calc, self.world,
+                                      self.ray_array)
+
+            if self.player.overlay:
+                self.player.draw_screen_overlay(delta_time, (255, 0, 0, 125), 1)
+            for mob in self.mob_array:
+                mob.ai(self.player, self.world, delta_time, self.particle_array,
+                       self.sound_sys, self.damage_sys, self.calc)
+            self.zombie.ai(self.player, self.world, delta_time, self.particle_array,
+                           self.sound_sys, self.damage_sys, self.calc)
+
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.player.weapon_rotation_update(x, y, self.calc)
@@ -78,27 +133,7 @@ class Engine(arcade.Window):
 
     def on_update(self, delta_time):
         if self.initialized:
-            c = self.world.get_world_coords()
-            #print(self.mouse_buttons)
-            for particle in self.particle_array:
-                if particle[0].sz <= 0:
-                    self.particle_array.remove(particle)
-                particle[0].action(
-                    delta_time,
-                    particle[1],
-                    particle[2],
-                    particle[3]
-                )
-            for ray in self.ray_array:
-                print(self.ray_array)
-                ray.action(delta_time, self.ray_array)
-            if self.player != None:
-                self.player.move(self.keys, self.sound_sys, delta_time, self.calc, self.world)
-                self.player.mouse_actions(self.mouse_buttons, self.sound_sys, delta_time, self.calc, self.world, self.ray_array)
-                if self.player.overlay:
-                    self.player.draw_screen_overlay(delta_time, (255, 0, 0, 125), 1)
-                self.zombie.ai(self.player, self.world, delta_time, self.particle_array,
-                               self.sound_sys, self.damage_sys, self.calc)
+            self.game_update(delta_time)
 
     def on_key_press(self, key, modifiers):
         if key not in self.keys:

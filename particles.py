@@ -55,7 +55,7 @@ class Particle:
 
 
 class Line:
-    def __init__(self,x=0,y=0,dx=0,dy=0,sz=2,color=arcade.color.YELLOW,lifetime=0,can_damage=True):
+    def __init__(self,x=0,y=0,dx=0,dy=0,sz=4,color=arcade.color.YELLOW,lifetime=0,can_damage=True):
         super().__init__()
         self.x = x
         self.y = y
