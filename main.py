@@ -27,6 +27,7 @@ class Engine(arcade.Window):
 
         self.ray_array = []
         self.particle_array = []
+        self.mob_array = []
 
         self.ent = Entity()
         self.zombie = Zombie()
@@ -55,6 +56,8 @@ class Engine(arcade.Window):
             #self.ent.draw(self.world)
             for particle in self.particle_array:
                 particle[0].draw(self.world)
+            for ray in self.ray_array:
+                ray.draw(self.world)
             self.zombie.draw(self.world)
             self.player.draw()
 
@@ -65,17 +68,18 @@ class Engine(arcade.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button not in self.mouse_buttons:
-            self.mouse_buttons.append(button)
+            self.mouse_buttons.append((button, x, y))
 
     def on_mouse_release(self, x, y, button, modifiers):
-        if button in self.mouse_buttons:
-            self.mouse_buttons.remove(button)
-            if button == 1: self.player.reset_fire()
+        for b in self.mouse_buttons:
+            if button in b:
+                self.mouse_buttons.remove(b)
+                if button == 1: self.player.reset_fire()
 
     def on_update(self, delta_time):
         if self.initialized:
             c = self.world.get_world_coords()
-            #print(self.particle_array)
+            #print(self.mouse_buttons)
             for particle in self.particle_array:
                 if particle[0].sz <= 0:
                     self.particle_array.remove(particle)
@@ -85,7 +89,9 @@ class Engine(arcade.Window):
                     particle[2],
                     particle[3]
                 )
-
+            for ray in self.ray_array:
+                print(self.ray_array)
+                ray.action(delta_time, self.ray_array)
             if self.player != None:
                 self.player.move(self.keys, self.sound_sys, delta_time, self.calc, self.world)
                 self.player.mouse_actions(self.mouse_buttons, self.sound_sys, delta_time, self.calc, self.world, self.ray_array)

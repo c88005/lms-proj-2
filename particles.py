@@ -16,7 +16,6 @@ class Particle:
         self.maxdist = max_dist
         self.lifetime = lifetime
 
-
     def draw(self, world):
         coords = world.get_world_coords()
         arcade.draw_rect_filled(arcade.rect.XYWH(self.x + coords[0], self.y + coords[1],
@@ -56,7 +55,7 @@ class Particle:
 
 
 class Line:
-    def __init__(self,x=0,y=0,dx=0,dy=0,sz=2,color=arcade.color.YELLOW,lifetime=3):
+    def __init__(self,x=0,y=0,dx=0,dy=0,sz=2,color=arcade.color.YELLOW,lifetime=0,can_damage=True):
         super().__init__()
         self.x = x
         self.y = y
@@ -64,18 +63,21 @@ class Line:
         self.dy = dy
         self.sz = sz
         self.color = color
+        self.can_damage = can_damage
         self.lifetime = lifetime
 
     def draw(self, world):
         coords = world.get_world_coords()
         arcade.draw_line(
-            self.x + coords[0], self.y + coords[1],
-            self.dx + coords[0], self.dx + coords[1],
+            self.x, self.y,
+            self.dx, self.dy,
             self.color,self.sz
         )
 
-    def action(self, dt):
+    def action(self, dt, array):
         self.lifetime -= 1 * dt
         if self.lifetime <= 0:
             if self.sz > 0:
-                self.sz -= 1 * dt * 20
+                self.sz -= dt * 40
+            else:
+                array.remove(self)

@@ -110,17 +110,21 @@ class Player(Entity):
                 if self.weapon_cd > 0:
                     self.weapon_cd -= 1 * dt
                 for button in buttons:
-                    if button == 1:
+                    if button[0] == 1:
                         if self.weapon_cd <= 0:
-                            self.shoot(sound_sys, dt, calc, world, ray_array)
+                            self.shoot(sound_sys, dt, calc, world, ray_array, button)
 
-    def shoot(self, sound_sys, dt, calc, world, ray_array):
+    def shoot(self, sound_sys, dt, calc, world, ray_array, button):
         if self.weapon == 1:
             if not self.can_shoot: return
-            sound_sys.play_sound(sound_sys.get_sound("fire_pistol"))
-            ray_array.append(ray_array)
-            self.weapon_cd = 0.15
             self.can_shoot = False
+            coords = world.get_world_coords()
+            r = Line(x=self.x, y=self.y, dx=button[1], dy=button[2])
+            ray_array.append(r)
+            sound_sys.play_sound(sound_sys.get_sound("fire_pistol"))
+
+            self.weapon_cd = 0.15
+
 
     def reset_fire(self):
         self.can_shoot = True
