@@ -39,7 +39,7 @@ class Entity:
         for i in range(random.randint(5,15)):
             p = Particle(x=self.x, y=self.y)
             p_array = p.setup_new_particle(p)
-            particle_array.append(p)
+            particle_array.append(p_array)
             if p.lifetime <= 0:
                 particle_array.remove(p_array)
 

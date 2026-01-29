@@ -55,7 +55,7 @@ class Particle:
 
 
 class Line:
-    def __init__(self,x=0,y=0,dx=0,dy=0,sz=4,color=arcade.color.YELLOW,lifetime=0,can_damage=True):
+    def __init__(self,x=0,y=0,dx=0,dy=0,sz=4,color=arcade.color.YELLOW,lifetime=0,can_damage=True,damage=5):
         super().__init__()
         self.x = x
         self.y = y
@@ -65,6 +65,7 @@ class Line:
         self.color = color
         self.can_damage = can_damage
         self.lifetime = lifetime
+        self.damage = damage
 
     def draw(self, world):
         coords = world.get_world_coords()
@@ -80,4 +81,6 @@ class Line:
             if self.sz > 0:
                 self.sz -= dt * 40
             else:
-                array.remove(self)
+                for ray in array:
+                    if self in ray:
+                        array.remove(ray)

@@ -25,6 +25,10 @@ class Player(Entity):
         self.weapon = 1
         self.can_shoot = True
         self.weapon_cd = 0
+        self.light_ammo = 48
+        self.medium_ammo = 32
+        self.long_ammo = 90
+        self.heavy_ammo = 32
 
         self.additional = arcade.SpriteList()
         self.weapon_img = Object(self.x, self.y - 10, sz=2.5)
@@ -104,7 +108,7 @@ class Player(Entity):
                     else:
                         self.moves = False
 
-    def mouse_actions(self, buttons, sound_sys, dt, calc, world, ray_array):
+    def mouse_actions(self, buttons, sound_sys, dt, calc, world, ray_array, mouse):
         if self.client:
             if not self.is_dead:
                 if self.weapon_cd > 0:
@@ -112,30 +116,24 @@ class Player(Entity):
                 for button in buttons:
                     if button[0] == 1:
                         if self.weapon_cd <= 0:
-                            self.shoot(sound_sys, dt, calc, world, ray_array, button)
+                            self.shoot(sound_sys, dt, calc, world, ray_array, button, mouse)
 
-    def shoot(self, sound_sys, dt, calc, world, ray_array, button):
+    def shoot(self, sound_sys, dt, calc, world, ray_array, button, mouse):
         if self.weapon == 1:
-            if not self.can_shoot: return
-            self.can_shoot = False
-            coords = world.get_world_coords()
-            r = Line(x=self.x, y=self.y, dx=button[1], dy=button[2])
-            ray_array.append(r)
+            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=3, can_damage=True)
+            ray_array.append([r, r.can_damage, r.damage])
             sound_sys.play_sound(sound_sys.get_sound("fire_pistol"))
-            self.weapon_cd = 0.15
+            self.weapon_cd = 0.2
         elif self.weapon == 2:
             if not self.can_shoot: return
             self.can_shoot = False
-            coords = world.get_world_coords()
-            r = Line(x=self.x, y=self.y, dx=button[1], dy=button[2])
-            ray_array.append(r)
-            sound_sys.play_sound(sound_sys.get_sound("fire_pistol"))
-            self.weapon_cd = 0.15
-
+            r = Line(x=self.x, y=self.y, dx=button[1], dy=button[2], damage=5, can_damage=True)
+            ray_array.append([r, r.can_damage, r.damage])
+            sound_sys.play_sound(sound_sys.get_sound("fire_pistol2"))
+            self.weapon_cd = 0.25
 
     def reset_fire(self):
         self.can_shoot = True
-
 
     def get_true_position(self, world):
         coords = world.get_world_coords()
