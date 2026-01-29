@@ -22,7 +22,9 @@ class Player(Entity):
         self.third_party = False
         self.client = True
         self.name = ""
-        self.weapon = 3
+        self.weapon = 1
+        self.can_shoot = True
+        self.weapon_cd = 0
 
         self.additional = arcade.SpriteList()
         self.weapon_img = Object(self.x, self.y - 10, sz=2.5)
@@ -43,8 +45,14 @@ class Player(Entity):
         print(self.initmsg)
 
     def weapon_rotation_update(self, x, y, calc):
-        if self.weapon == 3:
+        if self.weapon == 1:
+            weapon_texture = "assets/textures/pistol.png"
+        elif self.weapon == 2:
+            weapon_texture = "assets/textures/pistol2.png"
+        elif self.weapon == 3:
             weapon_texture = "assets/textures/ak74.png"
+        else:
+            weapon_texture = "assets/textures/placeholder.png"
 
         if self.weapon_img.angle >= 135 or self.weapon_img.angle <= -45:
             self.weapon_img.change_texture(weapon_texture, True, True)
@@ -99,12 +107,24 @@ class Player(Entity):
     def mouse_actions(self, buttons, sound_sys, dt, calc, world, ray_array):
         if self.client:
             if not self.is_dead:
+                if self.weapon_cd > 0:
+                    self.weapon_cd -= 1 * dt
                 for button in buttons:
-                    if button[0] == 1:
-                        self.shoot(sound_sys, dt, calc, world, ray_array)
+                    if button == 1:
+                        if self.weapon_cd <= 0:
+                            self.shoot(sound_sys, dt, calc, world, ray_array)
 
     def shoot(self, sound_sys, dt, calc, world, ray_array):
-        ray_array.append(ray_array)
+        if self.weapon == 1:
+            if not self.can_shoot: return
+            sound_sys.play_sound(sound_sys.get_sound("fire_pistol"))
+            ray_array.append(ray_array)
+            self.weapon_cd = 0.15
+            self.can_shoot = False
+
+    def reset_fire(self):
+        self.can_shoot = True
+
 
     def get_true_position(self, world):
         coords = world.get_world_coords()

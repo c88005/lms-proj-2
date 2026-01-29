@@ -65,11 +65,12 @@ class Engine(arcade.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button not in self.mouse_buttons:
-            self.mouse_buttons.append((button, x, y))
+            self.mouse_buttons.append(button)
 
     def on_mouse_release(self, x, y, button, modifiers):
         if button in self.mouse_buttons:
             self.mouse_buttons.remove(button)
+            if button == 1: self.player.reset_fire()
 
     def on_update(self, delta_time):
         if self.initialized:
@@ -86,7 +87,6 @@ class Engine(arcade.Window):
                 )
 
             if self.player != None:
-
                 self.player.move(self.keys, self.sound_sys, delta_time, self.calc, self.world)
                 self.player.mouse_actions(self.mouse_buttons, self.sound_sys, delta_time, self.calc, self.world, self.ray_array)
                 if self.player.overlay:

@@ -12,7 +12,8 @@ class SoundSystem:
         equip_pistol = self.create_sound("assets/sounds/equip_pistol.ogg")
         equip = self.create_sound("assets/sounds/equip.ogg")
         equip_rifle = self.create_sound("assets/sounds/rifle_equip.mp3")
-        pistol = self.create_sound("assets/sounds/pistol_fire.mp3")
+        pistol2 = self.create_sound("assets/sounds/pistol_fire.mp3")
+        pistol = self.create_sound("assets/sounds/lpistol.mp3")
         shotgun = self.create_sound("assets/sounds/shotgun_fire.ogg")
         slash = self.create_sound("assets/sounds/slash.mp3")
         stun = self.create_sound("assets/sounds/stun.mp3")
@@ -37,6 +38,7 @@ class SoundSystem:
             # fire
             "fire_rifle": rifle,
             "fire_pistol": pistol,
+            "fire_pistol2": pistol2,
             "fire_shotgun": shotgun,
             # equips
             "eq_pistol": equip_pistol,
