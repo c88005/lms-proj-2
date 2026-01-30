@@ -25,7 +25,7 @@ class Zombie(Entity):
             coords = self.get_world_position(world)
             if not calc.collision(player_coords, self.get_position(), 50, 50, -1, 0):
 
-                angle = player.get_angle_to(coords[0], coords[1], world)
+                angle = player.get_angle_to(coords[0], coords[1])
                 x = math.cos(angle) * self.base_speed,
                 y = math.sin(angle) * self.base_speed,
                 self.y += (y[0]) * dt
@@ -38,7 +38,6 @@ class Zombie(Entity):
                     self.can_attack = False
                     self.attack_wait = 0
                     self.attack(1, player, particle_array, sound_sys, damage_sys, world, dt)
-
                 else:
                     if self.attack_wait < self.attack_cd:
                         self.attack_wait += dt / self.attack_cd

@@ -170,6 +170,5 @@ class Player(Entity):
         else:
             self.overlay = False
 
-    def get_angle_to(self, dx, dy, world):
-        coords = world.get_world_coords()
-        return math.atan2(coords[1] - self.new_y + self.y - dy, coords[0] - self.new_x + self.x - dx)
+    def get_angle_to(self, dx, dy):
+        return math.atan2(self.y - dy, self.x - dx)

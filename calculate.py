@@ -81,15 +81,14 @@ class Calc:
         angle = math.atan2(dy - y, dx - x)
         return angle
 
-    def rudimentary_raycast(self, point1, point2, pos, sz, step=20):
-        a = point2[0] - point1[0]
-        b = point2[1] - point1[1]
-
-        s1 = (a / step, b / step)
-        #s2 = (a / s1[0], b / s1[1])
-
-        for i in range(math.floor(s1[0] + s1[1])):
-            np = (point1[0] + s1[0] * i, point1[1] + s1[1] * i)
+    def rudimentary_raycast(self, point1, point2, pos, sz, step=30):
+        a = self.look_at(point1[0], point1[1], point2[0], point2[1])
+        b = math.cos(a) * step,
+        c = math.sin(a) * step,
+        d = math.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2) / step
+        for i in range(math.floor(d)):
+            np = (point1[0] + b[0] * i, point1[1] + c[0] * i)
             if self.collision(pos, np, sz, 5, -1, 0):
                 return True
+
         return False

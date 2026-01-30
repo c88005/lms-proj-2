@@ -68,7 +68,6 @@ class Line:
         self.damage = damage
 
     def draw(self, world):
-        coords = world.get_world_coords()
         arcade.draw_line(
             self.x, self.y,
             self.dx, self.dy,
