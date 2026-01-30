@@ -20,6 +20,7 @@ class Object(arcade.Sprite):
 
         #print(self.initmsg)
 
+
     def draw_as_rect(self, world):
         c = world.get_world_coords()
         return arcade.draw_texture_rect(self.texture,

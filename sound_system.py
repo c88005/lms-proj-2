@@ -21,7 +21,12 @@ class SoundSystem:
         kill = self.create_sound("assets/sounds/mw2.mp3")
         wave = self.create_sound("assets/sounds/wave_start.mp3")
         hit_flesh = self.create_sound("assets/sounds/hit_flesh.mp3")
+        storm = self.create_sound("assets/sounds/storm.mp3")
+        scrap_done = self.create_sound("assets/sounds/scrapping_done.mp3")
+        stim = self.create_sound("assets/sounds/stim.mp3")
+        marker = self.create_sound("assets/sounds/marker.mp3")
         hit_bludgeon = self.create_sound("assets/sounds/blunt_kill.mp3")
+        inter_wave_song = self.create_sound("assets/sounds/boss_wave.mp3")
         walk = self.create_sound_variance([
             "assets/sounds/walk1.mp3",
             "assets/sounds/walk2.mp3",
@@ -46,7 +51,12 @@ class SoundSystem:
             # misc
             "kill": kill,
             "wave_song": wave_music,
+            "boss_wave": inter_wave_song,
             "wave": wave,
+            "storm": storm,
+            "scrap": scrap_done,
+            "stim": stim,
+            "marker": marker,
             # fire
             "fire_rifle": rifle,
             "fire_pistol": pistol,
