@@ -17,6 +17,7 @@ class Entity:
         self.base_speed = 1
         self.speed_multiplier = 1
         self.active_ai = True
+        self.dead_time = 0
         self.moves = False
         self.attack_dmg = 1
         self.health = 10
@@ -36,7 +37,7 @@ class Entity:
                                 self.color)
 
     def create_hurt_particles(self, particle_array, world):
-        for i in range(random.randint(5,15)):
+        for i in range(random.randint(1,10)):
             p = Particle(x=self.x, y=self.y)
             p_array = p.setup_new_particle(p)
             particle_array.append(p_array)

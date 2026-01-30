@@ -19,6 +19,7 @@ class SoundSystem:
         stun = self.create_sound("assets/sounds/stun.mp3")
         gore = self.create_sound("assets/sounds/gore.mp3")
         kill = self.create_sound("assets/sounds/mw2.mp3")
+        wave = self.create_sound("assets/sounds/wave_start.mp3")
         hit_flesh = self.create_sound("assets/sounds/hit_flesh.mp3")
         hit_bludgeon = self.create_sound("assets/sounds/blunt_kill.mp3")
         walk = self.create_sound_variance([
@@ -26,6 +27,12 @@ class SoundSystem:
             "assets/sounds/walk2.mp3",
             "assets/sounds/walk3.mp3",
             "assets/sounds/walk4.mp3"
+        ])
+        wave_music = self.create_sound_variance([
+            "assets/sounds/wave_song1.mp3",
+            "assets/sounds/wave_song2.mp3",
+            "assets/sounds/wave_song3.mp3",
+            "assets/sounds/wave_song4.mp3"
         ])
         headshot = self.create_sound_variance([
             "assets/sounds/headshot1.mp3",
@@ -38,6 +45,8 @@ class SoundSystem:
             "pump": pump,
             # misc
             "kill": kill,
+            "wave_song": wave_music,
+            "wave": wave,
             # fire
             "fire_rifle": rifle,
             "fire_pistol": pistol,
@@ -75,19 +84,20 @@ class SoundSystem:
 
         return variance
 
-    def play_variance(self, variance, volume=1, pitch=1):
+    def play_variance(self, variance, volume=1, pitch=1, loop=False):
         if isinstance(variance, list):
             rnd = random.randint(0, len(variance) - 1)
-            arcade.play_sound(variance[rnd], volume, 0, False, pitch)
-            return variance[rnd]
+            a = arcade.play_sound(variance[rnd], volume, 0, loop, pitch)
+            return variance[rnd], a
+
         else:
             print("Sound provided is NOT a variance")
             return "dummas"
 
-    def play_sound(self, sound, volume=1, pitch=1):
+    def play_sound(self, sound, volume=1, pitch=1, loop=False):
         if not isinstance(sound, list):
-            arcade.play_sound(sound, volume, 0, False, pitch)
-            return sound
+            a = arcade.play_sound(sound, volume, 0, loop, pitch)
+            return sound, a
         else:
             print("Sound provided is NOT a sound (its a variance)")
             return "dummas"

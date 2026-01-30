@@ -29,6 +29,8 @@ class Player(Entity):
         self.medium_ammo = 32
         self.long_ammo = 90
         self.heavy_ammo = 32
+        self.in_shop = False
+        self.scrap_parts = 10
 
         self.additional = arcade.SpriteList()
         self.weapon_img = Object(self.x, self.y - 10, sz=2.5)
