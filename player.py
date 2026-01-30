@@ -127,18 +127,24 @@ class Player(Entity):
     def shoot(self, sound_sys, dt, calc, world, ray_array, button, mouse):
         n = float(random.randint(800, 1200)) / 1000
         if self.weapon == 1:
+            self.long_ammo -= 1
+            if self.light_ammo <= 0: return
             r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=3, can_damage=True)
             ray_array.append([r, r.can_damage, r.damage])
             sound_sys.play_sound(sound_sys.get_sound("fire_pistol"), 0.5, n)
             self.weapon_cd = 0.2
         elif self.weapon == 2:
+            self.long_ammo -= 1
             if not self.can_shoot: return
+            if self.medium_ammo <= 0: return
             self.can_shoot = False
             r = Line(x=self.x, y=self.y, dx=button[1], dy=button[2], damage=5, can_damage=True)
             ray_array.append([r, r.can_damage, r.damage])
             sound_sys.play_sound(sound_sys.get_sound("fire_pistol2"), 0.5, n)
             self.weapon_cd = 0.25
         elif self.weapon == 3:
+            if self.long_ammo <= 0: return
+            self.long_ammo -= 1
             r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=3, can_damage=True)
             ray_array.append([r, r.can_damage, r.damage])
             sound_sys.play_sound(sound_sys.get_sound("fire_rifle"), 0.5, n)

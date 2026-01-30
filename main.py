@@ -22,6 +22,8 @@ class Engine(arcade.Window):
         self.damage_sys = None
         self.gui = None
         self.calc = None
+        self.workbench = None
+        self.scrapper = None
         self.background_color = arcade.color.BLACK
         self.time_t = 0
         self.keys = []
@@ -50,6 +52,8 @@ class Engine(arcade.Window):
         self.player = Player()
         self.world = World()
         health_bg = Object(125, 35, "assets/textures/health_bg.png")
+        self.workbench = Object(100, 450, "assets/textures/workbench.png", 75)
+        self.scrapper = Object(170, 450, "assets/textures/scrapper.png", 75)
         self.useless_gui_sprite_array.append(health_bg)
         for _ in range(5):
             a = Zombie()
@@ -86,6 +90,8 @@ class Engine(arcade.Window):
         # self.ent.draw(self.world)
         for grass in self.grass_array:
             grass.draw_as_rect(self.world)
+        self.workbench.draw_as_rect(self.world)
+        self.scrapper.draw_as_rect(self.world)
         for particle in self.particle_array:
             #print(self.particle_array) DONT TURN THIS ON GAME LAGS SO BADLY
             particle[0].draw(self.world)
@@ -136,6 +142,9 @@ class Engine(arcade.Window):
                                                          (mob_c[0], mob_c[1]), 50) and not mob.is_dead :
                             mob.hurt(self.sound_sys, self.particle_array, "bullet",
                                      ray[0].damage, self.damage_sys, self.world, delta_time)
+                            if mob.is_dead:
+                                self.player.kills += 1
+                                self.sound_sys.play_sound(self.sound_sys.get_sound("kill"), 0.35)
                             ray[0].can_damage = False
 
     def on_mouse_motion(self, x, y, dx, dy):

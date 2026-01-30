@@ -7,6 +7,7 @@ class Zombie(Entity):
     def __init__(self):
         super().__init__(500, 270)
         self.color = arcade.color.AMAZON
+        self.dead_color = arcade.color.BRITISH_RACING_GREEN
         self.base_speed = 140
         self.speed_multiplier = 1
         self.active_ai = True

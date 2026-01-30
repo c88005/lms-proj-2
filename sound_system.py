@@ -18,6 +18,7 @@ class SoundSystem:
         slash = self.create_sound("assets/sounds/slash.mp3")
         stun = self.create_sound("assets/sounds/stun.mp3")
         gore = self.create_sound("assets/sounds/gore.mp3")
+        kill = self.create_sound("assets/sounds/mw2.mp3")
         hit_flesh = self.create_sound("assets/sounds/hit_flesh.mp3")
         hit_bludgeon = self.create_sound("assets/sounds/blunt_kill.mp3")
         walk = self.create_sound_variance([
@@ -35,6 +36,8 @@ class SoundSystem:
             # reload and shi
             "bolt": bolt,
             "pump": pump,
+            # misc
+            "kill": kill,
             # fire
             "fire_rifle": rifle,
             "fire_pistol": pistol,
