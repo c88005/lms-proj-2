@@ -8,16 +8,23 @@ class Object(arcade.Sprite):
         super().__init__()
         self.center_x = x
         self.center_y = y
+        self.sz = sz
         if not os.path.isfile(texture) or texture.strip() == "":
             self.texture = arcade.load_texture("assets/textures/placeholder.png")
-            self.scale = sz
+            self.scale = self.sz
         else:
             self.texture = arcade.load_texture(texture)
-            self.scale = sz
+            self.scale = self.sz
         self.type = "object"
         self.initmsg = "object module is initialized"
 
-        print(self.initmsg)
+        #print(self.initmsg)
+
+    def draw_as_rect(self, world):
+        c = world.get_world_coords()
+        return arcade.draw_texture_rect(self.texture,
+                                         arcade.rect.XYWH(self.center_x + c[0], self.center_y + c[1],
+                                                          self.sz, self.sz), pixelated=True)
 
     def change_texture(self, texture, flip=False, gun=False):
         if not os.path.isfile(texture) or texture.strip() == "":

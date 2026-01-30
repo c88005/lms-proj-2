@@ -17,7 +17,7 @@ class Zombie(Entity):
         self.type = "zombie"
         self.initmsg = "zombie module is initialized"
 
-        print(self.initmsg)
+        #print(self.initmsg)
 
     def ai(self, player, world, dt, particle_array, sound_sys, damage_sys, calc):
         if self.active_ai:
@@ -43,8 +43,6 @@ class Zombie(Entity):
                         self.attack_wait += dt / self.attack_cd
                     else:
                         self.can_attack = True
-
-
 
     def attack(self, damage, ent, particle_array, sound_sys, damage_sys, world, dt):
         ent.hurt(sound_sys, particle_array, "light_blunt", damage, damage_sys, world, dt)

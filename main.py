@@ -35,6 +35,7 @@ class Engine(arcade.Window):
         self.menu = False
 
         self.ray_array = []
+        self.grass_array = []
         self.particle_array = []
         self.useless_gui_sprite_array = arcade.SpriteList()
         self.mob_array = []
@@ -54,8 +55,12 @@ class Engine(arcade.Window):
             a = Zombie()
             a.x = 500 + self.calc.rnd(-50, 50)
             a.y = 270 + self.calc.rnd(-50, 50)
-            a.base_speed = 150 + self.calc.rnd(-50, 50)
+            a.base_speed = 150 + self.calc.rnd(-50, 10)
             self.mob_array.append(a)
+        for _ in range(self.calc.rnd(35, 60)):
+            c = self.world.get_world_coords()
+            self.grass_array.append(Object(self.calc.rnd(-800, 800), self.calc.rnd(-800, 800),
+                                           "assets/textures/grass.png", 55))
         self.initialized = True
 
     def on_draw(self):
@@ -70,12 +75,17 @@ class Engine(arcade.Window):
                              15, 150, "center", "Arial", anchor_x="center")
             self.setup()
         else:
-            self.game_draw()
+            if self.menu:
+                pass
+            else:
+                self.game_draw()
 
 
     def game_draw(self):
         self.background_color = arcade.color.RUSSIAN_GREEN
         # self.ent.draw(self.world)
+        for grass in self.grass_array:
+            grass.draw_as_rect(self.world)
         for particle in self.particle_array:
             #print(self.particle_array) DONT TURN THIS ON GAME LAGS SO BADLY
             particle[0].draw(self.world)
@@ -90,6 +100,7 @@ class Engine(arcade.Window):
             wave_text = self.gui.create_text(f"INTERMISSION", 405, 470, arcade.color.WHITE, 30, 160)
         else:
             wave_text = self.gui.create_text(f"WAVE: {self.wave_counter}", 405, 470, arcade.color.WHITE, 30, 160)
+
 
 
     def game_update(self, delta_time):
@@ -146,7 +157,11 @@ class Engine(arcade.Window):
 
     def on_update(self, delta_time):
         if self.initialized:
-            self.game_update(delta_time)
+            if self.menu:
+                pass
+            else:
+                self.game_update(delta_time)
+
 
     def on_key_press(self, key, modifiers):
         if key not in self.keys:

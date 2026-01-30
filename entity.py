@@ -27,7 +27,7 @@ class Entity:
         self.type = "entity"
         self.initmsg = "entity module is initialized"
 
-        print(self.initmsg)
+        #print(self.initmsg)
 
     def draw(self, world):
         coords = world.get_world_coords()

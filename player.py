@@ -22,7 +22,7 @@ class Player(Entity):
         self.third_party = False
         self.client = True
         self.name = ""
-        self.weapon = 1
+        self.weapon = 3
         self.can_shoot = True
         self.weapon_cd = 0
         self.light_ammo = 48
@@ -76,35 +76,41 @@ class Player(Entity):
         self.step_sound_cd -= 2.75 * dt
         if self.client:
             if not self.is_dead:
+                c = world.get_world_coords()
+                #print(c)
                 for key in keys:
                     if key == arcade.key.A:
-                        self.moves = True
-                        if self.step_sound_cd <= 0:
-                            self.step_sound_cd = 1
-                            sound_sys.play_variance(sound_sys.get_sound("walk"), 0.25)
-                        world.add_world_x(self.base_speed * dt)
-                        self.new_x += (self.base_speed * dt)
+                        if c[0] < 1255:
+                            self.moves = True
+                            if self.step_sound_cd <= 0:
+                                self.step_sound_cd = 1
+                                sound_sys.play_variance(sound_sys.get_sound("walk"), 0.25)
+                            world.add_world_x(self.base_speed * dt)
+                            self.new_x += (self.base_speed * dt)
                     elif key == arcade.key.D:
-                        self.moves = True
-                        if self.step_sound_cd <= 0:
-                            self.step_sound_cd = 1
-                            sound_sys.play_variance(sound_sys.get_sound("walk"), 0.25)
-                        world.add_world_x(-(self.base_speed * dt))
-                        self.new_x += -(self.base_speed * dt)
+                        if c[0] > -455:
+                            self.moves = True
+                            if self.step_sound_cd <= 0:
+                                self.step_sound_cd = 1
+                                sound_sys.play_variance(sound_sys.get_sound("walk"), 0.25)
+                            world.add_world_x(-(self.base_speed * dt))
+                            self.new_x += -(self.base_speed * dt)
                     elif key == arcade.key.W:
-                        self.moves = True
-                        if self.step_sound_cd <= 0:
-                            self.step_sound_cd = 1
-                            sound_sys.play_variance(sound_sys.get_sound("walk"), 0.25)
-                        world.add_world_y(-(self.base_speed * dt))
-                        self.new_y += -(self.base_speed * dt)
+                        if c[1] > -455:
+                            self.moves = True
+                            if self.step_sound_cd <= 0:
+                                self.step_sound_cd = 1
+                                sound_sys.play_variance(sound_sys.get_sound("walk"), 0.25)
+                            world.add_world_y(-(self.base_speed * dt))
+                            self.new_y += -(self.base_speed * dt)
                     elif key == arcade.key.S:
-                        self.moves = True
-                        if self.step_sound_cd <= 0:
-                            self.step_sound_cd = 1
-                            sound_sys.play_variance(sound_sys.get_sound("walk"), 0.25)
-                        world.add_world_y(self.base_speed * dt)
-                        self.new_y += (self.base_speed * dt)
+                        if c[1] < 1255:
+                            self.moves = True
+                            if self.step_sound_cd <= 0:
+                                self.step_sound_cd = 1
+                                sound_sys.play_variance(sound_sys.get_sound("walk"), 0.25)
+                            world.add_world_y(self.base_speed * dt)
+                            self.new_y += (self.base_speed * dt)
                     else:
                         self.moves = False
 
@@ -119,18 +125,24 @@ class Player(Entity):
                             self.shoot(sound_sys, dt, calc, world, ray_array, button, mouse)
 
     def shoot(self, sound_sys, dt, calc, world, ray_array, button, mouse):
+        n = float(random.randint(800, 1200)) / 1000
         if self.weapon == 1:
             r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=3, can_damage=True)
             ray_array.append([r, r.can_damage, r.damage])
-            sound_sys.play_sound(sound_sys.get_sound("fire_pistol"))
+            sound_sys.play_sound(sound_sys.get_sound("fire_pistol"), 0.5, n)
             self.weapon_cd = 0.2
         elif self.weapon == 2:
             if not self.can_shoot: return
             self.can_shoot = False
             r = Line(x=self.x, y=self.y, dx=button[1], dy=button[2], damage=5, can_damage=True)
             ray_array.append([r, r.can_damage, r.damage])
-            sound_sys.play_sound(sound_sys.get_sound("fire_pistol2"))
+            sound_sys.play_sound(sound_sys.get_sound("fire_pistol2"), 0.5, n)
             self.weapon_cd = 0.25
+        elif self.weapon == 3:
+            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=3, can_damage=True)
+            ray_array.append([r, r.can_damage, r.damage])
+            sound_sys.play_sound(sound_sys.get_sound("fire_rifle"), 0.5, n)
+            self.weapon_cd = 0.1
 
     def reset_fire(self):
         self.can_shoot = True
