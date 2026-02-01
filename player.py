@@ -22,14 +22,14 @@ class Player(Entity):
         self.third_party = False
         self.client = True
         self.name = ""
-        self.weapon = 1
+        self.weapon = 3
         self.can_shoot = True
         self.weapon_cd = 0
         self.light_ammo = 48
         self.medium_ammo = 32
         self.long_ammo = 90
         self.heavy_ammo = 32
-        self.in_shop = True
+        self.in_shop = False
         self.scrap_parts = 10
 
         self.additional = arcade.SpriteList()
@@ -56,7 +56,11 @@ class Player(Entity):
         elif self.weapon == 2:
             weapon_texture = "assets/textures/pistol2.png"
         elif self.weapon == 3:
+            weapon_texture = "assets/textures/mac10.png"
+        elif self.weapon == 4:
             weapon_texture = "assets/textures/ak74.png"
+        elif self.weapon == 5:
+            weapon_texture = "assets/textures/spas12.png"
         else:
             weapon_texture = "assets/textures/placeholder.png"
 
@@ -145,12 +149,31 @@ class Player(Entity):
             sound_sys.play_sound(sound_sys.get_sound("fire_pistol2"), 0.5, n)
             self.weapon_cd = 0.25
         elif self.weapon == 3:
+            if self.light_ammo <= 0: return
+            self.light_ammo -= 1
+            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=2, can_damage=True)
+            ray_array.append([r, r.can_damage, r.damage])
+            n = float(random.randint(1500, 2500)) / 1000
+            sound_sys.play_sound(sound_sys.get_sound("fire_pistol"), 0.5, n)
+            self.weapon_cd = 0.065
+        elif self.weapon == 4:
             if self.long_ammo <= 0: return
             self.long_ammo -= 1
-            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=3, can_damage=True)
+            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=4, can_damage=True)
             ray_array.append([r, r.can_damage, r.damage])
             sound_sys.play_sound(sound_sys.get_sound("fire_rifle"), 0.5, n)
             self.weapon_cd = 0.1
+        elif self.weapon == 5:
+            if not self.can_shoot: return
+            if self.heavy_ammo <= 0: return
+            self.can_shoot = False
+            self.heavy_ammo -= 1
+            for _ in range(8):
+                x, y = random.randint(-40, 40), random.randint(-40, 40)
+                r = Line(x=self.x, y=self.y, dx=mouse[0] + x, dy=mouse[1] + y, damage=5, can_damage=True)
+                ray_array.append([r, r.can_damage, r.damage])
+            sound_sys.play_sound(sound_sys.get_sound("fire_shotgun"), 0.5, n)
+            self.weapon_cd = 0.3
 
     def reset_fire(self):
         self.can_shoot = True
