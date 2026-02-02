@@ -412,16 +412,16 @@ class Engine(arcade.Window):
             print(x, y)
             if self.player.in_shop:
                 if not self.can_click_shop: return
-                if button == 4 and x > 164 and x < 315 and y > 397 and x < 447:
+                if button == 4 and x > 164 and x < 315 and y > 397 and y < 447:
                     self.can_click_shop = False
                     self.heal_player()
-                elif button == 4 and x > 164 and x < 315 and y > 303 and x < 356:
+                elif button == 4 and x > 164 and x < 315 and y > 303 and y < 356:
                     self.can_click_shop = False
                     self.upgrade_weapon()
-                elif button == 4 and x > 164 and x < 315 and y > 212 and x < 268:
+                elif button == 4 and x > 164 and x < 315 and y > 212 and y < 268:
                     self.can_click_shop = False
                     self.craft_ammo()
-                elif button == 4 and x > 164 and x < 315 and y > 124 and x < 179:
+                elif button == 4 and x > 164 and x < 315 and y > 124 and y < 179:
                     self.can_click_shop = False
                     self.craft_mine()
 

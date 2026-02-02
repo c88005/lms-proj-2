@@ -30,7 +30,7 @@ class Player(Entity):
         self.long_ammo = 90
         self.heavy_ammo = 32
         self.in_shop = False
-        self.scrap_parts = 10
+        self.scrap_parts = 100000000
         self.bandages = 3
         self.mines = 0
         self.potions = 0
