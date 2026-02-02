@@ -30,7 +30,7 @@ class Player(Entity):
         self.long_ammo = 90
         self.heavy_ammo = 32
         self.in_shop = False
-        self.scrap_parts = 100000000
+        self.scrap_parts = 10
         self.bandages = 3
         self.mines = 0
         self.potions = 0
@@ -247,4 +247,5 @@ class Player(Entity):
             self.overlay = False
 
     def get_angle_to(self, dx, dy):
+
         return math.atan2(self.y - dy, self.x - dx)
