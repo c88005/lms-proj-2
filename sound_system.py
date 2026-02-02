@@ -15,6 +15,7 @@ class SoundSystem:
         pistol2 = self.create_sound("assets/sounds/pistol_fire.mp3")
         pistol = self.create_sound("assets/sounds/lpistol.mp3")
         shotgun = self.create_sound("assets/sounds/shotgun_fire.ogg")
+        explosion = self.create_sound("assets/sounds/explosion.mp3")
         slash = self.create_sound("assets/sounds/slash.mp3")
         stun = self.create_sound("assets/sounds/stun.mp3")
         gore = self.create_sound("assets/sounds/gore.mp3")
@@ -26,6 +27,7 @@ class SoundSystem:
         stim = self.create_sound("assets/sounds/stim.mp3")
         marker = self.create_sound("assets/sounds/marker.mp3")
         hit_bludgeon = self.create_sound("assets/sounds/blunt_kill.mp3")
+        menu_song = self.create_sound("assets/sounds/intermezzo.mp3")
         inter_wave_song = self.create_sound("assets/sounds/boss_wave.mp3")
         walk = self.create_sound_variance([
             "assets/sounds/walk1.mp3",
@@ -52,6 +54,7 @@ class SoundSystem:
             "kill": kill,
             "wave_song": wave_music,
             "boss_wave": inter_wave_song,
+            "menu_song": menu_song,
             "wave": wave,
             "storm": storm,
             "scrap": scrap_done,
@@ -62,6 +65,7 @@ class SoundSystem:
             "fire_pistol": pistol,
             "fire_pistol2": pistol2,
             "fire_shotgun": shotgun,
+            "explode": explosion,
             # equips
             "eq_pistol": equip_pistol,
             "eq": equip,

@@ -4,7 +4,7 @@ import os.path
 
 
 class Object(arcade.Sprite):
-    def __init__(self,x=0,y=0,texture="assets/textures/placeholder.png",sz=1):
+    def __init__(self,x=0,y=0,texture="assets/textures/placeholder.png",sz=1,type="object"):
         super().__init__()
         self.center_x = x
         self.center_y = y
@@ -15,7 +15,7 @@ class Object(arcade.Sprite):
         else:
             self.texture = arcade.load_texture(texture)
             self.scale = self.sz
-        self.type = "object"
+        self.type = type
         self.initmsg = "object module is initialized"
 
         #print(self.initmsg)

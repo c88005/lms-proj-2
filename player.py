@@ -22,7 +22,7 @@ class Player(Entity):
         self.third_party = False
         self.client = True
         self.name = ""
-        self.weapon = 3
+        self.weapon = 1
         self.can_shoot = True
         self.weapon_cd = 0
         self.light_ammo = 48
@@ -31,6 +31,10 @@ class Player(Entity):
         self.heavy_ammo = 32
         self.in_shop = False
         self.scrap_parts = 10
+        self.bandages = 3
+        self.mines = 100
+        self.potions = 0
+        self.can_use = True
 
         self.additional = arcade.SpriteList()
         self.weapon_img = Object(self.x, self.y - 10, sz=2.5)
@@ -120,6 +124,35 @@ class Player(Entity):
                     else:
                         self.moves = False
 
+    def use(self, keys, sound_sys, dt, calc, world, item_array):
+        if self.client:
+            if not self.is_dead:
+                c = world.get_world_coords()
+                for key in keys:
+                    if key == arcade.key.X:
+                        if self.bandages <= 0: return
+                        if not self.can_use: return
+                        self.can_use = False
+                        sound_sys.play_sound(sound_sys.get_sound("stim"), 0.55)
+                        self.health += 2
+                        self.bandages -= 1
+                    elif key == arcade.key.Z:
+                        if self.potions <= 0: return
+                        if not self.can_use: return
+                        self.can_use = False
+                        sound_sys.play_sound(sound_sys.get_sound("stim"), 0.55, 0.69420)
+                        self.health += 5
+                        self.potions -= 1
+                    elif key == arcade.key.C:
+                        if self.mines <= 0: return
+                        if not self.can_use: return
+                        self.can_use = False
+                        p = self.get_true_position(world)
+                        mine = Object(p[0], p[1], "assets/textures/mine.png", 50, "mine")
+                        item_array.append(mine)
+                        sound_sys.play_sound(sound_sys.get_sound("eq_rifle"), 0.55, 0.85)
+                        self.mines -= 1
+
     def mouse_actions(self, buttons, sound_sys, dt, calc, world, ray_array, mouse):
         if self.client:
             if not self.is_dead:
@@ -151,7 +184,7 @@ class Player(Entity):
         elif self.weapon == 3:
             if self.light_ammo <= 0: return
             self.light_ammo -= 1
-            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=2, can_damage=True)
+            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=4, can_damage=True)
             ray_array.append([r, r.can_damage, r.damage])
             n = float(random.randint(1500, 2500)) / 1000
             sound_sys.play_sound(sound_sys.get_sound("fire_pistol"), 0.5, n)
@@ -159,7 +192,7 @@ class Player(Entity):
         elif self.weapon == 4:
             if self.long_ammo <= 0: return
             self.long_ammo -= 1
-            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=4, can_damage=True)
+            r = Line(x=self.x, y=self.y, dx=mouse[0], dy=mouse[1], damage=6, can_damage=True)
             ray_array.append([r, r.can_damage, r.damage])
             sound_sys.play_sound(sound_sys.get_sound("fire_rifle"), 0.5, n)
             self.weapon_cd = 0.1

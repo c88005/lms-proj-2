@@ -38,7 +38,7 @@ class Zombie(Entity):
                 if self.can_attack:
                     self.can_attack = False
                     self.attack_wait = 0
-                    self.attack(1, player, particle_array, sound_sys, damage_sys, world, dt)
+                    self.attack(self.attack_dmg, player, particle_array, sound_sys, damage_sys, world, dt)
                 else:
                     if self.attack_wait < self.attack_cd:
                         self.attack_wait += dt / self.attack_cd
