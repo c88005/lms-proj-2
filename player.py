@@ -32,7 +32,7 @@ class Player(Entity):
         self.in_shop = False
         self.scrap_parts = 10
         self.bandages = 3
-        self.mines = 100
+        self.mines = 0
         self.potions = 0
         self.can_use = True
 
